@@ -152,6 +152,8 @@ class PDF(FPDF):
         directory = os.path.dirname(filename)
         if not os.path.exists(directory):
             os.makedirs(directory)
-        filename = re.sub(r'\s', '', f'{directory}/{datetime.datetime.now().strftime("%d%m%Y")}_{self.pdf_data.address_info.name}_{self.pdf_data.order_info.comm}_{self.pdf_data.article_info.colour}.pdf')
+
+        filename = f'{directory}/' + re.sub(r'\s', '', f'{datetime.datetime.now().strftime("%d%m%Y")}_{self.pdf_data.address_info.name}_{self.pdf_data.order_info.comm}_{self.pdf_data.article_info.colour}.pdf')
+
         self.pages = { n:''.join(filter(lambda x: x in set(string.printable), page)) for n,page in self.pages.items() }
         self.output(filename)

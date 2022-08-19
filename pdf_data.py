@@ -97,7 +97,7 @@ class pdf_data:
 
             # Store the order information.
             try:
-                _regex = search(r'Datum:(\d{2}-\d{2}-\d{4})Ordernummer:(\d+)Commissie:(.*)Leverweek:(\d{4}-\d{2})', ord_info)
+                _regex = search(r'Datum:(\d{2}-\d{2}-\d{4})Ordernummer:([\d\.]+)Commissie:(.*)Leverweek:(\d{4}-\d{2})', ord_info)
                 self.order_info.date   = _regex.group(1)
                 self.order_info.comm   = _regex.group(3)
                 self.order_info.week   = _regex.group(4)
@@ -112,7 +112,7 @@ class pdf_data:
             # Store the article information.
             try:
                 self.article_info.backgrounds = [ (int(x), int(y)) for (x,y) in findall(r'AW\d{3}-\d{3}Bokmerk Keukenwandpaneel (\d+) x (\d+)', art_info)]
-                self.article_info.colour = search(r'kleur: ([A-Za-z\s]+\d*)\d', art_info).group(1)
+                self.article_info.colour = search(r'kleur: ([A-Za-z\s]+\d*) ', art_info).group(1)
                 _regex = search(r'LIJMBokmerk Montagelijm koker(\d+)', art_info)
                 self.article_info.num_glue = _regex.group(1) if _regex else ''
                 _regex = search(r'K\d{2}Siliconenkit \| ([A-Z]+)(\d+)', art_info)
@@ -128,3 +128,4 @@ class pdf_data:
                 popup('Error: fout in artikelen.')
                 self.wrong = True
                 return
+
