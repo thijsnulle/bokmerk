@@ -1,7 +1,7 @@
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pdfplumber import open
-from re import search, split, findall, sub
+from re import search, split, findall
 from typing import List, Tuple
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -115,12 +115,12 @@ class pdf_data:
                 self.article_info.colour = search(r'kleur: ([A-Za-z\s]+\d*) ', art_info).group(1)
                 _regex = search(r'LIJMBokmerk Montagelijm koker(\d+)', art_info)
                 self.article_info.num_glue = _regex.group(1) if _regex else ''
-                _regex = search(r'K\d{2}Siliconenkit \| ([A-Z]+)(\d+)', art_info)
+                _regex = search(r'K\d{2}Siliconenkit \| ([A-Z\d]+)(\d)', art_info)
                 self.article_info.kit_colour = _regex.group(1) if _regex else ''
                 self.article_info.num_kit_colour = _regex.group(2) if _regex else ''
                 _regex = search(r'CLEANBokmerk Wandcleaner set(\d+)', art_info)
                 self.article_info.num_cleaner = _regex.group(1) if _regex else ''
-                _regex = search(r'LAKSTIFTLakstift \| kleur: ([A-Za-z\s]+\d*)', art_info)
+                _regex = search(r'LAKSTIFTLakstift \| kleur: [A-Za-z\s]+\d* (\d)', art_info)
                 self.article_info.lakstift = _regex.group(1) if _regex else ''
                 _regex = search(r'AKAfdekkap .*\| kleur: [A-Za-z\s]+\d*(\d)', art_info)
                 self.article_info.afdekkap = _regex.group(1) if _regex else ''

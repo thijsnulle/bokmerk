@@ -6,7 +6,7 @@ import tkinter.filedialog as fd
 import tkinter.ttk as ttk
 
 root = tk.Tk();
-root.title('Bokmerk v1.0')
+root.title('Bokmerk v2.0')
 root.geometry('400x250')
 
 def popup(text, ok_text = 'Sluit', close_text = None):
@@ -44,8 +44,7 @@ def generate():
         if not filenames[0].lower().endswith('.pdf'):
             popup('Selecteer 1 PDF bestand.')
 
-        draw_panels = popup('Genereer tekeningen?', 'Ja', 'Nee')
-        pdf = PDF(filenames[0], draw_panels)
+        PDF(filenames[0])
     elif len(filenames) == 2:
         if not any([ f.lower().endswith('.pdf') for f in filenames ]) or all([ f.lower().endswith('.pdf') for f in filenames ]):
             popup('Selecteer 1 PDF bestand en 1 afbeelding.')
@@ -53,7 +52,7 @@ def generate():
         pdf_file = [ f for f in filenames if f.lower().endswith('.pdf') ][0]
         img_file = [ f for f in filenames if not f.lower().endswith('.pdf') ][0]
 
-        pdf = PDF(pdf_file, False, img_file)
+        PDF(pdf_file, False, img_file)
     else:
         popup('Selecteer maximaal 2 bestanden.')
 
@@ -74,5 +73,8 @@ style.configure(
 
 button = ttk.Button(root, text='Genereer', style='TButton', command=lambda: generate())
 button.pack(side=tk.TOP, pady=20)
+
+version_info = tk.Label(root, text="Versie 2.0")
+version_info.pack(side='bottom', pady=16)
 
 root.mainloop()
