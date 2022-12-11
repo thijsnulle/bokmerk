@@ -6,7 +6,7 @@ import tkinter.filedialog as fd
 import tkinter.ttk as ttk
 
 root = tk.Tk();
-root.title('Bokmerk v2.0')
+root.title('Bokmerk v2.1')
 root.geometry('400x250')
 
 def popup(text, ok_text = 'Sluit', close_text = None):
@@ -74,7 +74,7 @@ style.configure(
 button = ttk.Button(root, text='Genereer', style='TButton', command=lambda: generate())
 button.pack(side=tk.TOP, pady=20)
 
-version_info = tk.Label(root, text="Versie 2.0")
+version_info = tk.Label(root, text="Versie 2.1")
 version_info.pack(side='bottom', pady=16)
 
 root.mainloop()

@@ -136,7 +136,7 @@ class PDF(FPDF):
         width, height = Image.open(image).size
 
         _w = 277.0
-        _h = 148.0
+        _h = 143.0
 
         w = min(width, _w)
         h = w * (height/width)
@@ -145,7 +145,7 @@ class PDF(FPDF):
             h = _h
             w = w * (h/_h)
 
-        self.image(image, 15.0 + _w / 2 - w / 2, 40.0 + _h / 2 - h / 2, w, h)
+        self.image(image, 15.0 + _w / 2 - w / 2, 45.0 + _h / 2 - h / 2, w, h)
 
 
     def save(self, filename):

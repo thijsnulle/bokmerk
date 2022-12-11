@@ -58,16 +58,16 @@ class pdf_data:
             
             lines = [ lines[key] for key in sorted(lines.keys()) ]
 
-            self.address_info.name    = lines[2]
-            self.address_info.address = lines[3]
-            self.address_info.city    = lines[4]
-            self.address_info.phone   = lines[6]
-            self.address_info.delivery_name     = lines[9]
-            self.address_info.delivery_address  = lines[10]
-            self.address_info.delivery_postcode = lines[11]
+            self.address_info.name    = lines[1]
+            self.address_info.address = lines[2]
+            self.address_info.city    = lines[3]
+            self.address_info.phone   = lines[5]
+            self.address_info.delivery_name     = lines[7]
+            self.address_info.delivery_address  = lines[8]
+            self.address_info.delivery_postcode = lines[9]
 
             # Split the contents of the PDF into address, order and article information.
-            parts = split(r'ArtikelOmschrijvingAantalStuksprijsTotaal|Extra informatie: |Orderbevestiging', ''.join([c['text'] for c in pdf.pages[0].chars]))
+            parts = split(r'ArtikelOmschrijvingAantalStuksprijsTotaal|Extra informatie:|Orderbevestiging|Betalingsvoorwaarden:', ''.join([c['text'] for c in pdf.pages[0].chars]))
             ord_info, art_info, extra_info, *_ = parts
 
             # Store the delivery and store information.
@@ -111,7 +111,7 @@ class pdf_data:
 
             # Store the article information.
             try:
-                self.article_info.backgrounds = [ (int(x), int(y)) for (x,y) in findall(r'AW\d{3}-\d{3}Bokmerk Keukenwandpaneel (\d+) x (\d+)', art_info)]
+                self.article_info.backgrounds = [ (int(x), int(y)) for (x,y) in findall(r'AW\d{3}-\d{3}Bokmerk Keukenwandpaneel ?(\d+) x (\d+)', art_info)]
                 self.article_info.colour = search(r'kleur: ([A-Za-z\s]+\d*) ', art_info).group(1)
                 _regex = search(r'LIJMBokmerk Montagelijm koker(\d+)', art_info)
                 self.article_info.num_glue = _regex.group(1) if _regex else ''
