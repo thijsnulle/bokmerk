@@ -53,8 +53,11 @@ def generate():
         img_file = [ f for f in filenames if not f.lower().endswith('.pdf') ][0]
 
         PDF(pdf_file, False, img_file)
+    elif all([ f.lower().endswith('.pdf') for f in filenames ]):
+        for f in filenames:
+            PDF(f)
     else:
-        popup('Selecteer maximaal 2 bestanden.')
+        popup('Selecteer alleen PDF bestanden, of 1 PDF en 1 afbeelding.')
 
 image = ImageTk.PhotoImage(Image.open(resource_path('images/logo-bokmerk.png')).resize((320, 96)))
 logo = tk.Label(root, image = image)

@@ -7,7 +7,7 @@ Usage:
 
 from setuptools import setup
 
-APP = ['Application.py']
+APP = ['Bokmerk.py']
 DATA_FILES = [('images', ['images/logo-bokmerk.png', 'images/legend.png'])]
 OPTIONS = {
     'iconfile': 'images/icon.png'
