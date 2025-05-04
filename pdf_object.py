@@ -45,7 +45,7 @@ class PDF(FPDF):
         self.set_font('Helvetica', size=9)
         for (y, desc, value) in zip([17,23,29,35,41], ['Besteldatum', 'Bedrijf', 'Plaats', 'Commissie', 'Telefoon'], [self.pdf_data.order_info.date, self.pdf_data.address_info.name, self.pdf_data.address_info.city, None, self.pdf_data.address_info.phone]):
             self.set_xy(10.0, y); self.cell(w=0, txt=desc)
-            self.set_xy(31.0, y); self.cell(w=0, txt=value if value else '')
+            self.set_xy(31.0, y); self.cell_rescale(txt=value if value else '', font_size=9, max_width=45)
             self.line(31.0, y+2.0, 78.0, y+2.0)
 
         self.set_font('Helvetica', 'B', size=9)
@@ -78,14 +78,10 @@ class PDF(FPDF):
 
         ### THIRD COLUMN ###
         self.set_font('Helvetica', size=9)
-        for (y, desc, value) in zip([17,23,29,35,41], ['Orderweek', 'Afleveradres', '', '', ''], [self.pdf_data.order_info.week, None, self.pdf_data.address_info.delivery_address, self.pdf_data.address_info.delivery_postcode, None]):
+        for (y, desc, value) in zip([17,23,29,35,41], ['Orderweek', 'Afleveradres', '', '', ''], [self.pdf_data.order_info.week, self.pdf_data.address_info.delivery_name, self.pdf_data.address_info.delivery_address, self.pdf_data.address_info.delivery_postcode, None]):
             self.set_xy(150.0, y); self.cell(w=0, txt=desc)
-            self.set_xy(171.0, y); self.cell(w=0, txt=value if value else '')
+            self.set_xy(171.0, y); self.cell_rescale(txt=value if value else '', font_size=9, max_width=45)
             self.line(171.0, y+2.0, 218.0, y+2.0)
-
-        self.set_font('Helvetica', 'B', size=9)
-        self.set_xy(171.0, 23.0); self.cell(w=0, txt=self.pdf_data.address_info.delivery_name if self.pdf_data.address_info.delivery_name else '')
-        self.line(171.0, 25.0, 218.0, 25.0)
 
         ### FOURTH COLUMN ###
         self.set_font('Helvetica', size=9)
@@ -94,7 +90,7 @@ class PDF(FPDF):
             self.line(242.0, y+2.0, 288.0, y+2.0)
 
         for (y, value) in zip([17,23,29,35,41], *[self.pdf_data.extra_info]):
-            self.set_xy(242.0, y); self.cell(w=0, txt=value if value else '')
+            self.set_xy(242.0, y); self.cell_rescale(txt=value if value else '', font_size=9, max_width=45)
 
         self.image(resource_path('images/logo-bokmerk.png'), 240.0, 190.0, 50.0, 15.0)
         self.image(resource_path('images/legend.png'), 10.0, 195.0, 135.0, 15.0)
@@ -148,6 +144,23 @@ class PDF(FPDF):
         self.image(image, 15.0 + _w / 2 - w / 2, 45.0 + _h / 2 - h / 2, w, h)
 
 
+    def cell_rescale(self, txt, max_width, font_size):
+        if not txt:
+            return
+
+        self.set_font('Helvetica', size=font_size)
+
+        while (width := self.get_string_width(txt)) > max_width:
+            font_size = font_size - 0.1
+
+            self.set_font('Helvetica', size=font_size)
+
+            if font_size <= 6:
+                break
+
+        self.cell(w=0, txt=txt)
+
+
     def save(self, filename):
         directory = os.path.dirname(filename)
         if not os.path.exists(directory):
@@ -157,3 +170,4 @@ class PDF(FPDF):
 
         self.pages = { n:''.join(filter(lambda x: x in set(string.printable), page)) for n,page in self.pages.items() }
         self.output(filename)
+

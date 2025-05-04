@@ -5,6 +5,7 @@ from re import search, split, findall
 from typing import List, Tuple
 import tkinter as tk
 import tkinter.ttk as ttk
+from unidecode import unidecode
 
 @dataclass
 class address_info:
@@ -62,38 +63,13 @@ class pdf_data:
             self.address_info.address = lines[2]
             self.address_info.city    = lines[3]
             self.address_info.phone   = lines[5]
-            self.address_info.delivery_name     = lines[7]
-            self.address_info.delivery_address  = lines[8]
-            self.address_info.delivery_postcode = lines[9]
+            self.address_info.delivery_name     = unidecode(lines[7])
+            self.address_info.delivery_address  = unidecode(lines[8])
+            self.address_info.delivery_postcode = unidecode(lines[9])
 
             # Split the contents of the PDF into address, order and article information.
             parts = split(r'ArtikelOmschrijvingAantalStuksprijsTotaal|Extra informatie:|Orderbevestiging|Betalingsvoorwaarden:', ''.join([c['text'] for c in pdf.pages[0].chars]))
             ord_info, art_info, extra_info, *_ = parts
-
-            # Store the delivery and store information.
-            # try:
-            #     print(addr_info.split('Afleveradres')[0])
-            #     _regex = search(r'([A-Z][A-za-z\s\.]+[a-z\.])\s+([A-Z][A-za-z\s\.]+ \d+[A-Z]?)\s+(\d{4} [A-Z]{2} [A-Z][A-za-z\s\.]+)\s+([\d\s]+)', addr_info.split('Afleveradres')[0])
-            #     self.address_info.name    = _regex.group(1)
-            #     self.address_info.address = _regex.group(2)
-            #     self.address_info.city    = _regex.group(3)
-            #     self.address_info.phone   = _regex.group(4)
-
-            # except Exception:
-            #     popup('Error: fout in adresgegevens deel 1.')
-            #     self.wrong = True
-            #     return
-
-            # try:
-            #     _regex = search(r'([A-Z][A-za-z\s\.]+[a-z\.])\s+([A-Z][A-za-z\s\.]+ \d+[A-Z]?)\s+(\d{4} [A-Z]{2} [A-Z][A-za-z\s\.]+)', addr_info.split('Afleveradres')[1])
-            #     self.address_info.delivery_name     = _regex.group(1)
-            #     self.address_info.delivery_address  = _regex.group(2)
-            #     self.address_info.delivery_postcode = _regex.group(3)
-
-            # except Exception:
-            #     popup('Error: fout in adresgegevens deel 2.')
-            #     self.wrong = True
-            #     return
 
             # Store the order information.
             try:
@@ -111,7 +87,7 @@ class pdf_data:
 
             # Store the article information.
             try:
-                self.article_info.backgrounds = [ (int(x), int(y)) for (x,y) in findall(r'AW\d{3}-\d{3}Bokmerk Keukenwandpaneel ?(\d+) x (\d+)', art_info)]
+                self.article_info.backgrounds = [ (int(x), int(y)) for (x,y) in findall(r'[AS]W\d{3}-\d{3}Bokmerk (?:Sanitair|Keuken)wandpaneel ?(\d+) x (\d+)', art_info)]
                 self.article_info.colour = search(r'kleur: ([A-Za-z\s]+\d*) ', art_info).group(1)
                 _regex = search(r'LIJMBokmerk Montagelijm koker(\d+)', art_info)
                 self.article_info.num_glue = _regex.group(1) if _regex else ''
