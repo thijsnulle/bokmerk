@@ -6,7 +6,7 @@ import tkinter.filedialog as fd
 import tkinter.ttk as ttk
 
 root = tk.Tk();
-root.title('Bokmerk v2.1')
+root.title('Bokmerk v2.2')
 root.geometry('400x250')
 
 def popup(text, ok_text = 'Sluit', close_text = None):
@@ -68,7 +68,7 @@ style.theme_use('aqua')
 style.configure(
     'TButton',
     background = 'white',
-    foreground = 'black',
+    foreground = '#16161D',
     width = 20,
     height = 1,
     borderwidth = 2
@@ -77,7 +77,7 @@ style.configure(
 button = ttk.Button(root, text='Genereer', style='TButton', command=lambda: generate())
 button.pack(side=tk.TOP, pady=20)
 
-version_info = tk.Label(root, text="Versie 2.1")
+version_info = tk.Label(root, text="Versie 2.2")
 version_info.pack(side='bottom', pady=16)
 
 root.mainloop()

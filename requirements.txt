@@ -1,0 +1,6 @@
+fpdf==1.7.2
+pdfplumber==0.10
+unidecode
+packaging
+macholib
+modulegraph

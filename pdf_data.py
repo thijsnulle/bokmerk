@@ -83,7 +83,10 @@ class pdf_data:
                 return
 
             if 'extra_info' in locals():
-                self.extra_info = extra_info.split('Betalingsvoorwaarden')[0].split(',')
+                if not 'Betalingsvoorwaarden' in extra_info:
+                    self.extra_info = ''
+                else:
+                    self.extra_info = extra_info.split('Betalingsvoorwaarden')[0].split(',')
 
             # Store the article information.
             try:
