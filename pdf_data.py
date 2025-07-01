@@ -5,7 +5,7 @@ from re import search, split, findall
 from typing import List, Tuple
 import tkinter as tk
 import tkinter.ttk as ttk
-from unidecode import unidecode
+import unicodedata
 
 @dataclass
 class address_info:
@@ -63,9 +63,9 @@ class pdf_data:
             self.address_info.address = lines[2]
             self.address_info.city    = lines[3]
             self.address_info.phone   = lines[5]
-            self.address_info.delivery_name     = unidecode(lines[7])
-            self.address_info.delivery_address  = unidecode(lines[8])
-            self.address_info.delivery_postcode = unidecode(lines[9])
+            self.address_info.delivery_name     = unicodedata.normalize("NFKD", lines[7])
+            self.address_info.delivery_address  = unicodedata.normalize("NFKD", lines[8])
+            self.address_info.delivery_postcode = unicodedata.normalize("NFKD", lines[9])
 
             # Split the contents of the PDF into address, order and article information.
             parts = split(r'ArtikelOmschrijvingAantalStuksprijsTotaal|Extra informatie:|Orderbevestiging|Betalingsvoorwaarden:', ''.join([c['text'] for c in pdf.pages[0].chars]))
