@@ -68,7 +68,7 @@ class pdf_data:
             self.address_info.delivery_postcode = unicodedata.normalize("NFKD", lines[9])
 
             # Split the contents of the PDF into address, order and article information.
-            parts = split(r'ArtikelOmschrijvingAantalStuksprijsTotaal|Extra informatie:|Orderbevestiging|Betalingsvoorwaarden:', ''.join([c['text'] for c in pdf.pages[0].chars]))
+            parts = split(r'ArtikelOmschrijvingAantalStuksprijsTotaal|Extra informatie:|Orderbevestiging', ''.join([c['text'] for c in pdf.pages[0].chars]))
             ord_info, art_info, extra_info, *_ = parts
 
             # Store the order information.
@@ -83,10 +83,11 @@ class pdf_data:
                 return
 
             if 'extra_info' in locals():
-                if not 'Betalingsvoorwaarden' in extra_info:
-                    self.extra_info = ''
-                else:
-                    self.extra_info = extra_info.split('Betalingsvoorwaarden')[0].split(',')
+                split_word = 'Betalingsvoorwaarden' if 'Betalingsvoorwaarden' in extra_info else 'Indien u uiterlijk'
+
+                self.extra_info = extra_info.split(split_word)[0].split(',')
+
+                print(self.extra_info)
 
             # Store the article information.
             try:
